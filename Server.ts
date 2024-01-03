@@ -19,17 +19,18 @@ server.listen(port, host, () => {
   console.log(`Server started on port ${port} at ${host}`);
 });
 
-server.maxConnections = 1;
+server.maxConnections = 2;
 //Declare connection listener function
 function onClientConnection(sock: net.Socket) {
   console.log(`${sock.remoteAddress}:${sock.remotePort} Connected`);
   connections_number++;
-  currentClient = sock;
   console.log("connections_number opened", connections_number);
   if (connections_number > 1) {
     console.log("2 client connected");
     sock.destroy();
+    return;
   }
+  currentClient = sock;
   sock.on("data", (data: any) => {
     //Log data from the client
     console.log(`${sock.remoteAddress}:${sock.remotePort}  : ${data} `);
